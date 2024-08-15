@@ -1,0 +1,11 @@
+Instalacion 
+NodeJs
+Angular
+pnpm
+-----
+Direccionar a la ruta donde quiero que se cree el proyecto
+
+--Proyecto Angular
+
+Servicios => Service  => ng g service Nombre_Servicio
+http://localhost/sexto/proyectos/01evaluacion/controllers/categorias.controller.php?op=actualizar

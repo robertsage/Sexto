@@ -1,11 +1,8 @@
-Instalacion 
-NodeJs
-Angular
-pnpm
------
-Direccionar a la ruta donde quiero que se cree el proyecto
+url
+www.google.com?op=todos
 
---Proyecto Angular
 
-Servicios => Service  => ng g service Nombre_Servicio
+Controlador
+$_GET["op"]
+//esto no mira el usuario
 http://localhost/sexto/proyectos/01evaluacion/controllers/categorias.controller.php?op=actualizar

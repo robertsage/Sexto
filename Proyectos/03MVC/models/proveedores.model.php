@@ -65,7 +65,7 @@ class Provedores
             $con = new ClaseConectar();
             $con = $con->ProcedimientoParaConectar();
             $cadena = "DELETE FROM `proveedores` WHERE `idProveedores`= $idProveedores";
-            // echo $cadena;
+            //echo $cadena;
             if (mysqli_query($con, $cadena)) {
                 return 1;
             } else {

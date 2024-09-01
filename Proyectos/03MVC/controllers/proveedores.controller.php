@@ -1,10 +1,10 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-header("Allow: GET, POST, OPTIONS, PUT, DELETE");
-$method = $_SERVER["REQUEST_METHOD"];
-if ($method == "OPTIONS") {
+header("Access-Control-Allow-Origin: *");// El asterisco determina que cualquier ip puede conectarse, o sino se especifica una ip directamente
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");// Que peticiones pueden pedir, de seguridad, origen, respuesta, de contenido, de aceptación o de respuesta como método
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");//que métodos vamos a utilizar,
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");//WPA= Web Application progressive, WPS= Web Application Single
+$method = $_SERVER["REQUEST_METHOD"];//Busque método de petición
+if ($method == "OPTIONS") {//Bloquea el metodo para pasar datos, en este caso pregunta si el método es OPTIONS se muere el proceso
     die();
 }
 //TODO: controlador de proveedores

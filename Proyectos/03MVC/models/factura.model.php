@@ -3,9 +3,31 @@
 require_once('../config/config.php');
 class Factura
 {
+
+        
+    public function todos() // select * from factura
+    {
+        $con = new ClaseConectar();
+        $con = $con->ProcedimientoParaConectar();
+        $cadena = "SELECT factura.idFactura, clientes.Nombres, (factura.Sub_total + factura.Sub_total_iva) as total FROM `factura` INNER JOIN clientes on factura.Clientes_idClientes = clientes.idClientes";
+        $datos = mysqli_query($con, $cadena);
+        $con->close();
+        return $datos;
+    }
+
+    public function uno($idFactura) // select * from factura where id = $idFactura
+    {
+        $con = new ClaseConectar();
+        $con = $con->ProcedimientoParaConectar();
+        $cadena = "SELECT * FROM `factura` INNER JOIN clientes on factura.Clientes_idClientes = clientes.idClientes WHERE `idFactura` = $idFactura";
+        $datos = mysqli_query($con, $cadena);
+        $con->close();
+        return $datos;
+    }
+    
     //TODO: Implementar los metodos de la clase
 
-    public function todos() //select * from factura
+    /*public function todos() //select * from factura
     {
         $con = new ClaseConectar();
         $con = $con->ProcedimientoParaConectar();
@@ -23,7 +45,7 @@ class Factura
         $datos = mysqli_query($con, $cadena);
         $con->close();
         return $datos;
-    }
+    }*/
 
     public function insertar($Fecha, $Sub_total, $Sub_total_iva, $Valor_IVA, $Clientes_idClientes) //insert into factura (Fecha, Sub_total, Sub_total_iva, Valor_IVA, Clientes_idClientes) values ($Fecha, $Sub_total, $Sub_total_iva, $Valor_IVA, $Clientes_idClientes)
     {

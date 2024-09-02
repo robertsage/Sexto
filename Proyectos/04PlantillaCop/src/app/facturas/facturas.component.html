@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Lista de Facturas" blockClass="pc-component">
+            <div class="col-md-12 col-xl-8">
+                <h5 class="mb-3">
+                    <a href="nuevafactura" class="btn btn-outline-dark">Nueva Factura</a>
+                </h5>
+                <div class="card tbl-card">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Fecha</th>
+                                    <th>Sub Total</th>
+                                    <th>Sub Total IVA</th>
+                                    <th class="text-end">Valor IVA</th>
+                                    <th class="text-end">Clientes idClientes</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (factura of listaFacturas; track $index) {
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ factura.Fecha }}</td>
+                                    <td>{{ factura.Sub_total }}</td>
+                                    <td>{{ factura.Sub_total_iva }}</td>
+                                    <td>{{ factura.Valor_IVA }}</td>
+                                    <td>{{ factura.Clientes_idClientes }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-success">
+                                            Editar
+                                        </button>
+                                        <button (click)="eliminar(factura.idFactura)" type="button"
+                                            class="btn btn-outline-danger">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+</div>

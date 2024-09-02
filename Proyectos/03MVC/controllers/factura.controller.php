@@ -7,61 +7,84 @@ $method = $_SERVER["REQUEST_METHOD"];
 if ($method == "OPTIONS") {
     die();
 }
-//TODO: controlador de factura
+
+// TODO: controlador de facturas Tienda Cel@g
 
 require_once('../models/factura.model.php');
 error_reporting(0);
 $factura = new Factura;
 
 switch ($_GET["op"]) {
-        //TODO: operaciones de factura
+        // TODO: operaciones de facturas
 
-    case 'todos': //TODO: Procedimiento para cargar todos las datos de la factura
-        $datos = array(); // Defino un arreglo para almacenar los valores que vienen de la clase factura.model.php
-        $datos = $factura->todos(); // Llamo al metodo todos de la clase factura.model.php
-        while ($row = mysqli_fetch_assoc($datos)) //Ciclo de repeticion para asociar los valor almacenados en la variable $datos
-        {
-            $todos[] = $row;
+    case 'todos': // Procedimiento para cargar todas las facturas
+        $datos = array();
+        $datos = $factura->todos();
+        while ($row = mysqli_fetch_assoc($datos)) {
+            $todas[] = $row;
         }
-        echo json_encode($todos);
+        echo json_encode($todas);
         break;
-        //TODO: procedimiento para obtener un registro de la base de datos
-    case 'uno':
-        $idFactura = $_POST["idFactura"];
+
+    case 'uno': // Procedimiento para obtener una factura por ID
+        if (!isset($_POST["idFactura"])) {
+            echo json_encode(["error" => "Factura ID not specified."]);
+            exit();
+        }
+        $idFactura = intval($_POST["idFactura"]);
         $datos = array();
         $datos = $factura->uno($idFactura);
         $res = mysqli_fetch_assoc($datos);
         echo json_encode($res);
         break;
-        //TODO: Procedimiento para insertar una factura en la base de datos
-    case 'insertar':
+
+    case 'insertar': // Procedimiento para insertar una nueva factura
+        if (!isset($_POST["Fecha"]) || !isset($_POST["Sub_total"]) || !isset($_POST["Sub_total_iva"]) || !isset($_POST["Valor_IVA"]) || !isset($_POST["Clientes_idClientes"])) {
+            echo json_encode(["error" => "Missing required parameters."]);
+            exit();
+        }
+
         $Fecha = $_POST["Fecha"];
         $Sub_total = $_POST["Sub_total"];
         $Sub_total_iva = $_POST["Sub_total_iva"];
         $Valor_IVA = $_POST["Valor_IVA"];
-        $Clientes_idClientes = $_POST["Clientes_idClientes"];
+        $Clientes_idClientes = intval($_POST["Clientes_idClientes"]);
 
         $datos = array();
-        $datos = $factura->insertar($Fecha, $Sub_total, $Sub_total_iva, $Valor_IVA,$Clientes_idClientes);
+        $datos = $factura->insertar($Fecha, $Sub_total, $Sub_total_iva, $Valor_IVA, $Clientes_idClientes);
         echo json_encode($datos);
         break;
-        //TODO: Procedimiento para actualziar una factura en la base de datos
-    case 'actualizar':
-        $idFactura = $_POST["idFactura"];
+
+    case 'actualizar': // Procedimiento para actualizar una factura existente
+        if (!isset($_POST["idFactura"]) || !isset($_POST["Fecha"]) || !isset($_POST["Sub_total"]) || !isset($_POST["Sub_total_iva"]) || !isset($_POST["Valor_IVA"]) || !isset($_POST["Clientes_idClientes"])) {
+            echo json_encode(["error" => "Missing required parameters."]);
+            exit();
+        }
+
+        $idFactura = intval($_POST["idFactura"]);
         $Fecha = $_POST["Fecha"];
         $Sub_total = $_POST["Sub_total"];
         $Sub_total_iva = $_POST["Sub_total_iva"];
         $Valor_IVA = $_POST["Valor_IVA"];
-        $Clientes_idClientes = $_POST["Clientes_idClientes"];
+        $Clientes_idClientes = intval($_POST["Clientes_idClientes"]);
+
         $datos = array();
-        $datos = $factura->actualizar($idFactura, $Fecha, $Sub_total, $Sub_total_iva, $Valor_IVA,$Clientes_idClientes);
+        $datos = $factura->actualizar($idFactura, $Fecha, $Sub_total, $Sub_total_iva, $Valor_IVA, $Clientes_idClientes);
         echo json_encode($datos);
         break;
-        //TODO: Procedimiento para eliminar una factura en la base de datos
-    case 'eliminar':
-        $idFactura = $_POST["idFactura"];
+
+    case 'eliminar': // Procedimiento para eliminar una factura
+        if (!isset($_POST["idFactura"])) {
+            echo json_encode(["error" => "Factura ID not specified."]);
+            exit();
+        }
+        $idFactura = intval($_POST["idFactura"]);
         $datos = array();
         $datos = $factura->eliminar($idFactura);
         echo json_encode($datos);
+        break;
+
+    default:
+        echo json_encode(["error" => "Invalid operation."]);
         break;
 }

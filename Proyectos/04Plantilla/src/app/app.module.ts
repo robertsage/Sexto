@@ -8,25 +8,29 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './theme/shared/shared.module';
 import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { ClientesComponent } from './clientes/clientes.component';
+import { ProductosComponent } from './productos/productos.component';
+import { FacturasComponent } from './facturas/facturas.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NuevoproveedorComponent } from './proveedores/nuevoproveedor/nuevoproveedor.component';
+import { NuevafacturaComponent } from './facturas/nuevafactura/nuevafactura.component';
+import { NuevoproductoComponent } from './productos/nuevoproducto/nuevoproducto.component';
+import { NuevoclienteComponent } from './clientes/nuevocliente/nuevocliente.component';
+import { UnidadmedidaComponent } from './unidadmedida/unidadmedida.component';
+import { NuevaunidadmedidaComponent } from './unidadmedida/nuevaunidadmedida/nuevaunidadmedida.component';
 import LoginComponent from './demo/authentication/login/login.component';
-import { DefaultComponent } from './demo/default/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    SharedModule,
-    BrowserAnimationsModule,
-    ProveedoresComponent,
-    NuevoproveedorComponent,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, SharedModule, BrowserAnimationsModule, 
+    ProveedoresComponent, NuevoproveedorComponent, 
+    ClientesComponent, NuevoclienteComponent, 
+    ProductosComponent, NuevoproductoComponent, 
+    FacturasComponent, NuevafacturaComponent, 
+    UnidadmedidaComponent, NuevaunidadmedidaComponent, 
+    LoginComponent,
+    HttpClientModule, FormsModule, ReactiveFormsModule],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

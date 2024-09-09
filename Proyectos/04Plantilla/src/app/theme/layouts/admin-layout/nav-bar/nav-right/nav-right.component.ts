@@ -74,38 +74,38 @@ export class NavRightComponent {
     },
     {
       icon: 'user',
-      title: 'View Profile'
+      title: 'Ver Perfil'
     },
     {
       icon: 'profile',
-      title: 'Social Profile'
+      title: 'Perfil Social'
     },
     {
       icon: 'wallet',
-      title: 'Billing'
+      title: 'Facturación'
     }
   ];
 
   setting = [
     {
       icon: 'question-circle',
-      title: 'Support'
+      title: 'Soporte'
     },
     {
       icon: 'user',
-      title: 'Account Settings'
+      title: 'Configurar Cuenta'
     },
     {
       icon: 'lock',
-      title: 'Privacy Center'
+      title: 'Centro de Privacidad'
     },
     {
       icon: 'comment',
-      title: 'Feedback'
+      title: 'Comentarios'
     },
     {
       icon: 'unordered-list',
-      title: 'History'
+      title: 'Historial'
     }
   ];
 }

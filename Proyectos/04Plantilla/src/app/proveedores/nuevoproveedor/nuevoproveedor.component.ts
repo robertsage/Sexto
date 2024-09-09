@@ -12,8 +12,8 @@ import { ProveedorService } from 'src/app/Services/proveedores.service';
   styleUrl: './nuevoproveedor.component.scss'
 })
 export class NuevoproveedorComponent implements OnInit {
-  titulo = 'Insertar Proveedor';
-  idProveedores = 0;
+  titulo = "Insertar Proveedor";
+  idproveedores = 0;
   Nombre_Empresa: any;
   Direccion;
   Telefono;
@@ -21,26 +21,27 @@ export class NuevoproveedorComponent implements OnInit {
   Teleofno_Contacto;
 
   constructor(
-    private provedorServicio: ProveedorService,
+    private proveedorServicio: ProveedorService,
     private navegacion: Router,
     private ruta: ActivatedRoute
-  ) {}
+  ) { }
   ngOnInit(): void {
-    this.idProveedores = parseInt(this.ruta.snapshot.paramMap.get('id'));
+    this.idproveedores = parseInt(this.ruta.snapshot.paramMap.get('id'));
     /*this.ruta.paramMap.subscribe((parametros) => {
-      this.idProveedores = parseInt(parametros.get('id'));
+      this.idproveedores = parseInt(parametros.get('id'));
     });*/
-
-    if (this.idProveedores > 0) {
-      this.provedorServicio.uno(this.idProveedores).subscribe((proveedor) => {
-        console.log(proveedor);
-        this.Nombre_Empresa = proveedor.Nombre_Empresa;
-        this.Direccion = proveedor.Direccion;
-        this.Telefono = proveedor.Telefono;
-        this.Contacto_Empresa = proveedor.Contacto_Empresa;
-        this.Teleofno_Contacto = proveedor.Teleofno_Contacto;
-        this.titulo = 'Actualizar Proveedor';
-      });
+    if (this.idproveedores > 0) {
+      this.proveedorServicio
+        .uno(this.idproveedores)
+        .subscribe((proveedor) => {
+          console.log(proveedor);
+          this.Nombre_Empresa = proveedor.Nombre_Empresa;
+          this.Direccion = proveedor.Direccion;
+          this.Telefono = proveedor.Telefono;
+          this.Contacto_Empresa = proveedor.Contacto_Empresa;
+          this.Teleofno_Contacto = proveedor.Teleofno_Contacto;
+          this.titulo = 'Actualizar Proveedor';
+        });
     }
   }
 
@@ -56,28 +57,32 @@ export class NuevoproveedorComponent implements OnInit {
       Contacto_Empresa: this.Contacto_Empresa,
       Teleofno_Contacto: this.Teleofno_Contacto
     };
-    console.log(this.idProveedores);
-    if (this.idProveedores == 0 || isNaN(this.idProveedores)) {
-      this.provedorServicio.insertar(iproveedor).subscribe((respuesta) => {
-        // parseInt(respuesta) > 1 ? alert('Grabado con exito') : alert('Error al grabar');
-        if (parseInt(respuesta) > 1) {
-          alert('Grabado con exito');
-          this.navegacion.navigate(['/proveedores']);
-        } else {
-          alert('Error al grabar');
-        }
-      });
+    console.log(this.idproveedores);
+    if (this.idproveedores == 0 || isNaN(this.idproveedores)) {
+
+      this.proveedorServicio.insertar(iproveedor).subscribe(
+        (respuesta) => {
+          // parseInt(respuesta) > 1 ? alert("Grabado con éxito") : alert("Error al grabar");
+          if (parseInt(respuesta) > 1) {
+            alert("Grabado con éxito");
+            this.navegacion.navigate(['/proveedores']);
+          } else {
+            alert("Error al grabar");
+          }
+        });
     } else {
-      iproveedor.idProveedores = this.idProveedores;
-      this.provedorServicio.actualizar(iproveedor).subscribe((respuesta) => {
+      iproveedor.idProveedores = this.idproveedores;
+      this.proveedorServicio.actualizar(iproveedor).subscribe((respuesta) => {
         if (parseInt(respuesta) > 0) {
-          this.idProveedores = 0;
-          alert('Actualizado con exito');
+          this.idproveedores = 0;
+          alert('Actualizado con éxito');
           this.navegacion.navigate(['/proveedores']);
         } else {
           alert('Error al actualizar');
         }
       });
+
+
     }
   }
 }

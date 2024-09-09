@@ -4,15 +4,15 @@
       <h3 class="mb-0">
         {{ titulo }}
         <!--Interpolacion
-          sirve para enviar datos desde el .ts hacia el html
-          -->
+            sirve para enviar datos desde el .ts hacia el html
+            -->
       </h3>
     </div>
     <div class="row">
       <form [formGroup]="frm_factura" novalidate (ngSubmit)="grabar()">
         <div class="form-group mb-3">
           <label class="form-label">Cliente</label>
-          <select class="form-control" formControlName="Clientes_idClientes" (change)="cambio($event)">
+          <select class="form-control" (change)="cambio($event)">
             <option>Seleccione una opcion</option>
             @for (cliente of listaClientes; track $index) {
               <option value="{{ cliente.idClientes }}">{{ cliente.Nombres }}</option>
@@ -26,7 +26,7 @@
           @if (frm_factura.get('Fecha').invalid && frm_factura.get('Fecha').touched) {
             <div>
               @if (frm_factura.get('Fecha').hasError('required')) {
-                <small style="color: red">Los nombres son requeridos</small>
+                <small style="color: red">La fecha es requerida</small>
               }
             </div>
           }
@@ -37,7 +37,7 @@
           @if (frm_factura.get('Sub_total').invalid && frm_factura.get('Sub_total').touched) {
             <div>
               @if (frm_factura.get('Sub_total').hasError('required')) {
-                <small style="color: red">Los nombres son requeridos</small>
+                <small style="color: red">El subtotal es requerido</small>
               }
             </div>
           }
@@ -48,7 +48,7 @@
           @if (frm_factura.get('Sub_total_iva').invalid && frm_factura.get('Sub_total_iva').touched) {
             <div>
               @if (frm_factura.get('Sub_total_iva').hasError('required')) {
-                <small style="color: red">Los nombres son requeridos</small>
+                <small style="color: red">El subtotal iva es requerido</small>
               }
             </div>
           }
@@ -65,7 +65,7 @@
         </div>
 
         <div class="d-grid mt-3">
-          <button type="submit" class="btn btn-primary">Grabar factura</button>
+          <button type="submit" class="btn btn-primary">Grabar Factura</button>
         </div>
       </form>
     </div>
@@ -73,18 +73,18 @@
 </div>
 
 <!--
-  IMPORTAR => FORMSMODULE  APP.MODULE.TS ||  NUEVOPROVEEDOR.COMPONENT.TS
-  
-  
-  
-  
-  
-  INTRPOLACION => DESDE EL TS AL HTML
-  {{ }} 
-  EVENTOS => EJECUTAR FUNCIONES EN EL TS
-  ()
-  DATA BINDING => DESDE EL HTML AL TS
-  []
-  TWO WAY BIDING => ENVIADO DE DATOS DESDE EL HTML AL TS Y DESDE EL TS AL HTML
-  [()]
-  -->
+    IMPORTAR => FORMSMODULE  APP.MODULE.TS ||  NUEVOPROVEEDOR.COMPONENT.TS
+    
+    
+    
+    
+    
+    INTRPOLACION => DESDE EL TS AL HTML
+    {{ }} 
+    EVENTOS => EJECUTAR FUNCIONES EN EL TS
+    ()
+    DATA BINDING => DESDE EL HTML AL TS
+    []
+    TWO WAY BIDING => ENVIADO DE DATOS DESDE EL HTML AL TS Y DESDE EL TS AL HTML
+    [()]
+    -->

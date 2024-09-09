@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IFactura } from '../Interfaces/factura';
+import { IFactura } from '../Interfaces/ifactura';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FacturaService {
-  apiurl = 'http://localhost/6semestre/proyectos/03MVC/controllers/factura.controller.php?op=';
+  apiurl = 'http://localhost/sexto/Proyectos/03MVC/controllers/factura.controller.php?op=';
 
   constructor(private lector: HttpClient) {}
 
@@ -38,7 +38,6 @@ export class FacturaService {
   }
 
   actualizar(factura: IFactura): Observable<string> {
-    console.log(factura);
     const formData = new FormData();
     formData.append('idFactura', factura.idFactura.toString());
     formData.append('Fecha', factura.Fecha);

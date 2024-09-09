@@ -1,10 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { ClientesService } from 'src/app/Services/clientes.service';
-import { ICliente } from 'src/app/Interfaces/icliente';
-import { CommonModule } from '@angular/common';
-import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ICliente } from 'src/app/Interfaces/icliente';
+import { ClientesService } from 'src/app/Services/clientes.service';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-nuevocliente',
   standalone: true,
@@ -30,7 +31,7 @@ export class NuevoclienteComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.idClientes = parseInt(this.ruta.snapshot.paramMap.get('idCliente'));
+    this.idClientes = parseInt(this.ruta.snapshot.paramMap.get('idcliente'));
     if (this.idClientes > 0) {
       this.clienteServicio.uno(this.idClientes).subscribe((uncliente) => {
         this.frm_Cliente.controls['Nombres'].setValue(uncliente.Nombres);
@@ -70,7 +71,7 @@ export class NuevoclienteComponent implements OnInit {
 
     Swal.fire({
       title: 'Clientes',
-      text: 'Desea gurdar al Cliente ' + this.frm_Cliente.controls['Nombres'].value,
+      text: 'Desea guardar al Cliente ' + this.frm_Cliente.controls['Nombres'].value,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#f00',

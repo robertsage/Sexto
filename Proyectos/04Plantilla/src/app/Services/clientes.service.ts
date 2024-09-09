@@ -5,10 +5,10 @@ import { ICliente } from '../Interfaces/icliente';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientesService {
-  apiurl = 'http://localhost/6semestre/proyectos/03MVC/controllers/clientes.controller.php?op=';
+  apiurl = 'http://localhost/sexto/Proyectos/03MVC/controllers/clientes.controller.php?op=';
   constructor(private lector: HttpClient) {}
 
   buscar(texto: string): Observable<ICliente> {

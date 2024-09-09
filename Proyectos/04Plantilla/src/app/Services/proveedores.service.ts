@@ -4,14 +4,16 @@ import { Observable } from 'rxjs';
 import { Iproveedor } from '../Interfaces/iproveedor';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProveedorService {
-  apiurl = 'http://localhost/6semestre/proyectos/03MVC/controllers/proveedores.controller.php?op=';
+  apiurl =
+    'http://localhost/sexto/Proyectos/03MVC/controllers/proveedores.controller.php?op=';
 
-  constructor(private lector: HttpClient) {}
+  constructor(private lector: HttpClient) { }
 
   todos(): Observable<Iproveedor[]> {
+    // console.log(this.apiurl + 'todos');
     return this.lector.get<Iproveedor[]>(this.apiurl + 'todos');
   }
   uno(idProveedor: number): Observable<Iproveedor> {

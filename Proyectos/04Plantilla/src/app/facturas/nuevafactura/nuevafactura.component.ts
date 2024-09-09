@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, Event, ActivatedRoute } from '@angular/router';
-import { IFactura } from 'src/app/Interfaces/factura';
 import { ICliente } from 'src/app/Interfaces/icliente';
+import { IFactura } from 'src/app/Interfaces/ifactura';
 import { ClientesService } from 'src/app/Services/clientes.service';
 import { FacturaService } from 'src/app/Services/factura.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nuevafactura',
@@ -14,14 +15,17 @@ import { FacturaService } from 'src/app/Services/factura.service';
   styleUrl: './nuevafactura.component.scss'
 })
 export class NuevafacturaComponent implements OnInit {
+  //variables o constantes
   titulo = 'Nueva Factura';
   listaClientes: ICliente[] = [];
   listaClientesFiltrada: ICliente[] = [];
   totalapagar: number = 0;
   idFactura = 0;
   cliente: ICliente;
+  //formgroup
   frm_factura: FormGroup;
 
+  ///////
   constructor(
     private clietesServicios: ClientesService,
     private facturaService: FacturaService,
@@ -30,7 +34,7 @@ export class NuevafacturaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.idFactura = parseInt(this.ruta.snapshot.paramMap.get('idFactura'));
+    this.idFactura = parseInt(this.ruta.snapshot.paramMap.get('idfactura'));
     this.frm_factura = new FormGroup({
       Fecha: new FormControl('', Validators.required),
       Sub_total: new FormControl('', Validators.required),
@@ -50,20 +54,16 @@ export class NuevafacturaComponent implements OnInit {
     });
     if (this.idFactura > 0) {
       this.facturaService.uno(this.idFactura).subscribe((unaFactura) => {
-        console.log(unaFactura);
-        this.frm_factura.controls['Fecha'].setValue(this.formato(unaFactura.Fecha));
+        this.frm_factura.controls['Fecha'].setValue(this.cambiarFormatFecha(unaFactura.Fecha));
         this.frm_factura.controls['Sub_total'].setValue(unaFactura.Sub_total);
         this.frm_factura.controls['Sub_total_iva'].setValue(unaFactura.Sub_total_iva);
         this.frm_factura.controls['Valor_IVA'].setValue(unaFactura.Valor_IVA);
         this.frm_factura.controls['Clientes_idClientes'].setValue(unaFactura.Clientes_idClientes);
         this.calculos();
         this.titulo = 'Editar Factura';
-        this.cliente = this.listaClientes.find((cliente) => cliente.idClientes == this.frm_factura.controls['Clientes_idClientes'].value);
+        this.cliente = this.obtenerCLiente(this.frm_factura.controls['Clientes_idClientes'].value);
       });
     }
-  }
-  formato(fecha: string): string {
-    return fecha.split(' ')[0];
   }
 
   grabar() {
@@ -75,17 +75,67 @@ export class NuevafacturaComponent implements OnInit {
       Valor_IVA: this.frm_factura.get('Valor_IVA')?.value,
       Clientes_idClientes: this.frm_factura.get('Clientes_idClientes')?.value
     };
-    if (this.idFactura > 0) {
-      this.facturaService.actualizar(factura).subscribe((res: any) => {
-        alert('Factura actualizada');
-        this.navegacion.navigate(['/facturas']);
-      });
-    } else {
-      this.facturaService.insertar(factura).subscribe((res: any) => {
-        alert('Factura grabada');
-        this.navegacion.navigate(['/facturas']);
-      });
-    }
+
+    Swal.fire({
+      title: 'Factura',
+      text: 'Desea guardar los cambios en la Factura del Cliente ',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f00',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Grabar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (this.idFactura > 0) {
+          this.facturaService.actualizar(factura).subscribe((res: any) => {
+            Swal.fire({
+              title: 'Factura',
+              text: res.mensaje,
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.navegacion.navigate(['/facturas']);
+          });
+        } else {
+          this.facturaService.insertar(factura).subscribe((res: any) => {
+            Swal.fire({
+              title: 'Factura',
+              text: res.mensaje,
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.navegacion.navigate(['/facturas']);
+          });
+        }
+      }
+    });
+  }
+
+  eliminar() {
+    Swal.fire({
+      title: 'Eliminar Factura',
+      text: '¿Está seguro de que desea eliminar esta factura?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Eliminar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.facturaService.eliminar(this.idFactura).subscribe((res: any) => {
+          Swal.fire({
+            title: 'Factura Eliminada',
+            text: res.mensaje,
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.navegacion.navigate(['/facturas']);
+        });
+      }
+    });
   }
 
   calculos() {
@@ -99,5 +149,15 @@ export class NuevafacturaComponent implements OnInit {
   cambio(objetoSleect: any) {
     let idCliente = objetoSleect.target.value;
     this.frm_factura.get('Clientes_idClientes')?.setValue(idCliente);
+    this.obtenerCLiente(idCliente);
+  }
+
+  cambiarFormatFecha(fecha: string): string {
+    return fecha.split(' ')[0]; // Esto toma solo la parte YYYY-MM-DD
+  }
+
+  obtenerCLiente(idCliente: number) {
+    const cliente = this.listaClientes.find((cliente) => cliente.idClientes == idCliente);
+    return cliente;
   }
 }

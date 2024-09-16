@@ -38,7 +38,7 @@ export class UnidadmedidaComponent implements OnInit {
       confirmButtonText: 'Eliminar!'
     }).then((result) => {
       if (result.isConfirmed) {
-        // console.log('verificar')
+        // console.log('aquiiiiii')
         this.unidadServicio.eliminar(idUnidadMedida).subscribe((res: any ) => {
           console.log(res);
           this.cargarUnidadesMedida();

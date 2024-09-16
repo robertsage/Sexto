@@ -1,40 +1,69 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, Event, ActivatedRoute } from '@angular/router';
+import { Router, Event } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ICliente } from 'src/app/Interfaces/icliente';
-import { IFactura } from 'src/app/Interfaces/ifactura';
 import { ClientesService } from 'src/app/Services/clientes.service';
 import { FacturaService } from 'src/app/Services/factura.service';
-import Swal from 'sweetalert2';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import html2canvas from 'html2canvas';
+import { IFactura } from 'src/app/Interfaces/ifactura';
 
 @Component({
   selector: 'app-nuevafactura',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './nuevafactura.component.html',
   styleUrl: './nuevafactura.component.scss'
 })
 export class NuevafacturaComponent implements OnInit {
+  idFactura = 0;
+  cliente: ICliente;
   //variables o constantes
   titulo = 'Nueva Factura';
   listaClientes: ICliente[] = [];
   listaClientesFiltrada: ICliente[] = [];
   totalapagar: number = 0;
-  idFactura = 0;
-  cliente: ICliente;
   //formgroup
   frm_factura: FormGroup;
+  productoelejido: any[] = [
+    {
+      Descripcion: 'Producto 1',
+      Cantidad: 2,
+      Precio: 1000,
+      Subtotal: 2000,
+      IVA: 12,
+      Total: 2000
+    },
+    {
+      Descripcion: 'Producto 2',
+      Cantidad: 2,
+      Precio: 1000,
+      Subtotal: 2000,
+      IVA: 12,
+      Total: 2000
+    },
+    {
+      Descripcion: 'Producto 3',
+      Cantidad: 2,
+      Precio: 1000,
+      Subtotal: 2000,
+      IVA: 12,
+      Total: 2000
+    }
+  ];
 
   ///////
   constructor(
     private clietesServicios: ClientesService,
     private facturaService: FacturaService,
     private navegacion: Router,
-    private ruta: ActivatedRoute
+    private modal: NgbModal
   ) {}
 
   ngOnInit(): void {
-    this.idFactura = parseInt(this.ruta.snapshot.paramMap.get('idfactura'));
     this.frm_factura = new FormGroup({
       Fecha: new FormControl('', Validators.required),
       Sub_total: new FormControl('', Validators.required),
@@ -67,8 +96,43 @@ export class NuevafacturaComponent implements OnInit {
   }
 
   grabar() {
+    //pdf copn html2canva
+
+    const DATA: any = document.getElementById('impresion');
+    html2canvas(DATA).then((html) => {
+      const anchoorignal = html.width;
+      const altooriginal = html.height;
+
+      const imgAncho = (anchoorignal * 1 * 200) / anchoorignal;
+      const imgAlto = (altooriginal * 1 * 200) / altooriginal;
+
+      const constenido = html.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const posicion = 0;
+      pdf.addImage(constenido, 'PNG', 0, posicion, imgAncho, imgAlto);
+      pdf.save('factura.pdf');
+    });
+    /* pdf con jspdf
+    const doc = new jsPDF();
+    doc.text('Lista de prodcutos', 10, 10);
+
+    const columnas = ['Descripcion', 'Cantidad', 'Precio', 'Subtotal', 'IVA', 'Total'];
+    const filas: any[] = [];
+    this.productoelejido.forEach((producto) => {
+      const fila = [producto.Descripcion, producto.Cantidad, producto.Precio, producto.Subtotal, producto.IVA, producto.Total];
+      filas.push(fila);
+    });
+
+    (doc as any).autoTable({
+      head: [columnas],
+      body: filas,
+      start: 20
+    });
+
+    doc.save('factura.pdf');
+
+    /*
     let factura: IFactura = {
-      idFactura: this.idFactura,
       Fecha: this.frm_factura.get('Fecha')?.value,
       Sub_total: this.frm_factura.get('Sub_total')?.value,
       Sub_total_iva: this.frm_factura.get('Sub_total_iva')?.value,
@@ -76,68 +140,13 @@ export class NuevafacturaComponent implements OnInit {
       Clientes_idClientes: this.frm_factura.get('Clientes_idClientes')?.value
     };
 
-    Swal.fire({
-      title: 'Factura',
-      text: 'Desea guardar los cambios en la Factura del Cliente ',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#f00',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Grabar!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (this.idFactura > 0) {
-          this.facturaService.actualizar(factura).subscribe((res: any) => {
-            Swal.fire({
-              title: 'Factura',
-              text: res.mensaje,
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500
-            });
-            this.navegacion.navigate(['/facturas']);
-          });
-        } else {
-          this.facturaService.insertar(factura).subscribe((res: any) => {
-            Swal.fire({
-              title: 'Factura',
-              text: res.mensaje,
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500
-            });
-            this.navegacion.navigate(['/facturas']);
-          });
-        }
+    this.facturaService.insertar(factura).subscribe((respuesta) => {
+      if (parseInt(respuesta) > 0) {
+        alert('Factura grabada');
+        this.navegacion.navigate(['/facturas']);
       }
-    });
+    });*/
   }
-
-  eliminar() {
-    Swal.fire({
-      title: 'Eliminar Factura',
-      text: '¿Está seguro de que desea eliminar esta factura?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Eliminar!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.facturaService.eliminar(this.idFactura).subscribe((res: any) => {
-          Swal.fire({
-            title: 'Factura Eliminada',
-            text: res.mensaje,
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
-          });
-          this.navegacion.navigate(['/facturas']);
-        });
-      }
-    });
-  }
-
   calculos() {
     let sub_total = this.frm_factura.get('Sub_total')?.value;
     let iva = this.frm_factura.get('Valor_IVA')?.value;
@@ -149,9 +158,29 @@ export class NuevafacturaComponent implements OnInit {
   cambio(objetoSleect: any) {
     let idCliente = objetoSleect.target.value;
     this.frm_factura.get('Clientes_idClientes')?.setValue(idCliente);
-    this.obtenerCLiente(idCliente);
   }
+  productosLista(evnto) {
+    alert('lista de prductos cargandp');
+    //servicio de prodcuto para cargar los productos
+  }
+  cargaModal(valoresModal: any) {
+    //productoelejido
 
+    const nuevoProducto: any = {
+      Descripcion: 'prodcuto 4',
+      Cantidad: 15,
+      Precio: 12.23,
+      Subtotal: 15.2,
+      IVA: 15,
+      Total: 185.9
+    };
+    this.productoelejido.push(nuevoProducto);
+    this.modal.dismissAll();
+
+    this.productoelejido.reduce((valor, producto) => {
+      this.totalapagar += producto.Total;
+    }, 0);
+  }
   cambiarFormatFecha(fecha: string): string {
     return fecha.split(' ')[0]; // Esto toma solo la parte YYYY-MM-DD
   }

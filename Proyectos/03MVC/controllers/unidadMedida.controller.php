@@ -1,62 +1,82 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-header("Allow: GET, POST, OPTIONS, PUT, DELETE");
-$method = $_SERVER["REQUEST_METHOD"];
-if ($method == "OPTIONS") {
+header("Access-Control-Allow-Origin: *");// El asterisco determina que cualquier ip puede conectarse, o sino se especifica una ip directamente
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");// Que peticiones pueden pedir, de seguridad, origen, respuesta, de contenido, de aceptación o de respuesta como método
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");//que métodos vamos a utilizar,
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");//WPA= Web Application progressive, WPS= Web Application Single
+$method = $_SERVER["REQUEST_METHOD"];//Busque método de petición
+if ($method == "OPTIONS") {//Bloquea el metodo para pasar datos, en este caso pregunta si el método es OPTIONS se muere el proceso
     die();
 }
-//TODO: controlador de unidadMedida
 
-require_once('../models/unidadMedida.model.php');
-error_reporting(0);//TODOS: DESHABILITAR ERRORR,  DEJAR COMENTADO Si se desea que se muestre el error
-$unidadMedida = new UnidadMedida;
+// Controlador de Unidad de Medida
+
+require_once('../models/unidadmedida.model.php');
+error_reporting(0);
+$unidad_medida = new Unidad_Medida;
 
 switch ($_GET["op"]) {
-        //TODO: operaciones de unidadMedida
-
-    case 'todos': //TODO: Procedimiento para cargar todos las datos de unidad_medida
-        $datos = array(); // Defino un arreglo para almacenar los valores que vienen de la clase unidadMedida.model.php
-        $datos = $unidadMedida->todos(); // Llamo al metodo todos de la clase unidadMedida.model.php
-        while ($row = mysqli_fetch_assoc($datos)) //Ciclo de repeticon para asociar los valor almancenados en la variable $datos
-        {
-            $todos[] = $row;
-        }
-        echo json_encode($todos);
-        break;
-        //TODO: procedimeinto para obtener un registro de la base de datos
-    case 'uno':
-        $idUnidad_Medida = $_POST["idUnidad_Medida"];
+    case 'todos': // Procedimiento para cargar todas las unidades de medida
         $datos = array();
-        $datos = $unidadMedida->uno($idUnidad_Medida);
+        $datos = $unidad_medida->todos();
+        while ($row = mysqli_fetch_assoc($datos)) {
+            $todas[] = $row;
+        }
+        echo json_encode($todas);
+        break;
+
+    case 'uno': // Procedimiento para obtener una unidad de medida por ID
+        if (!isset($_POST["idUnidad_Medida"])) {
+            echo json_encode(["error" => "Unidad de Medida ID not specified."]);
+            exit();
+        }
+        $idUnidad_Medida = intval($_POST["idUnidad_Medida"]);
+        $datos = array();
+        $datos = $unidad_medida->uno($idUnidad_Medida);
         $res = mysqli_fetch_assoc($datos);
         echo json_encode($res);
         break;
-        //TODO: Procedimeinto para insertar un unidad_medida en la base de datos
-    case 'insertar':
-        $Detalle = $_POST["Detalle"];
+
+    case 'insertar': // Procedimiento para insertar una nueva unidad de medida
+        if (!isset($_POST["Descripcion"]) || !isset($_POST["Tipo"])) {
+            echo json_encode(["error" => "Missing required parameters."]);
+            exit();
+        }
+
+        $Descripcion = $_POST["Descripcion"];
         $Tipo = $_POST["Tipo"];
-          
+
         $datos = array();
-        $datos = $unidadMedida->insertar($Detalle, $Tipo);
+        $datos = $unidad_medida->insertar($Descripcion, $Tipo);
         echo json_encode($datos);
         break;
-        //TODO: Procedimeinto para actualziar un unidad_medida en la base de datos
-    case 'actualizar':
-        $idUnidad_Medida = $_POST["idUnidad_Medida"];
-        $Detalle = $_POST["Detalle"];
+
+    case 'actualizar': // Procedimiento para actualizar una unidad de medida existente
+       // if (!isset($_POST["idUnidad_Medida"]) || !isset($_POST["Descripcion"]) || !isset($_POST["Tipo"])) {
+       //     echo json_encode(["error" => "Missing required parameters."]);
+       //     exit();
+       // }
+
+        $idUnidad_Medida = intval($_POST["idUnidad_Medida"]);
+        $Descripcion = $_POST["Descripcion"];
         $Tipo = $_POST["Tipo"];
-               
+
         $datos = array();
-        $datos = $unidadMedida->actualizar($idUnidad_Medida, $Detalle, $Tipo);
+        $datos = $unidad_medida->actualizar($idUnidad_Medida, $Descripcion, $Tipo);
         echo json_encode($datos);
         break;
-        //TODO: Procedimeinto para eliminar un unidad_medida en la base de datos
-    case 'eliminar':
-        $idUnidad_Medida = $_POST["idUnidad_Medida"];
+
+    case 'eliminar': // Procedimiento para eliminar una unidad de medida
+        if (!isset($_POST["idUnidad_Medida"])) {
+            echo json_encode(["error" => "Unidad de Medida ID not specified."]);
+            exit();
+        }
+        $idUnidad_Medida = intval($_POST["idUnidad_Medida"]);
         $datos = array();
-        $datos = $unidadMedida->eliminar($idUnidad_Medida);
+        $datos = $unidad_medida->eliminar($idUnidad_Medida);
         echo json_encode($datos);
+        break;
+
+    default:
+        echo json_encode(["error" => "Invalid operation."]);
         break;
 }

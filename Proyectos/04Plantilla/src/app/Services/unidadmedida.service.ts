@@ -4,10 +4,10 @@ import { Observable } from 'rxjs';
 import { IUnidadMedida } from '../Interfaces/iunidadmedida';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UnidadmedidaService {
-  apiurl = 'http://localhost/sexto/Proyectos/03MVC/controllers/unidadmedida.controller.php?op=';
+  apiurl = 'http://localhost/sexto/proyectos/03MVC/controllers/unidadmedida.controller.php?op=';
 
   constructor(private lector: HttpClient) {}
 
@@ -17,13 +17,13 @@ export class UnidadmedidaService {
 
   uno(idUnidad: number): Observable<IUnidadMedida> {
     const formData = new FormData();
-    formData.append('idUnidad', idUnidad.toString());
+    formData.append('idUnidad_Medida', idUnidad.toString());
     return this.lector.post<IUnidadMedida>(this.apiurl + 'uno', formData);
   }
 
   eliminar(idUnidad: number): Observable<number> {
     const formData = new FormData();
-    formData.append('idUnidad', idUnidad.toString());
+    formData.append('idUnidad_Medida', idUnidad.toString());
     return this.lector.post<number>(this.apiurl + 'eliminar', formData);
   }
 
@@ -36,7 +36,7 @@ export class UnidadmedidaService {
 
   actualizar(unidad: IUnidadMedida): Observable<string> {
     const formData = new FormData();
-    formData.append('idUnidad', unidad.idUnidad_Medida.toString());
+    formData.append('idUnidad_Medida', unidad.idUnidad_Medida.toString());
     formData.append('Descripcion', unidad.Detalle);
     formData.append('Tipo', unidad.Tipo.toString());
     return this.lector.post<string>(this.apiurl + 'actualizar', formData);

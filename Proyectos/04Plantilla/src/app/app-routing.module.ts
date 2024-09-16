@@ -66,7 +66,8 @@ const routes: Routes = [
       },
       {
         path: 'editarfactura/:idfactura',
-        loadComponent: () => import('./facturas/nuevafactura/nuevafactura.component').then((m) => m.NuevafacturaComponent)
+        loadComponent: () => import('./facturas/nuevafactura/nuevafactura.component').then((m) => m.NuevafacturaComponent),
+        canActivate: [usuariosGuardGuard]
       },
       {
         path: 'nuevafactura',

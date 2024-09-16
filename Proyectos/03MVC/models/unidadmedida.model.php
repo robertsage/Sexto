@@ -1,5 +1,5 @@
 <?php
-//TODO: Clase de Unidad_Medida
+//TODO: Clase de unidad_medida
 require_once('../config/config.php');
 class Unidad_Medida
 {
@@ -25,12 +25,12 @@ class Unidad_Medida
         return $datos;
     }
 
-    public function insertar($Detalle, $Tipo) //insert into unidad_medida (Detalle, Tipo) values ($Detalle, $Tipo)
+    public function insertar($Detalle, $Tipo) //insert into unidad_medida (detalle, tipo) values ($detalle, $tipo)
     {
         try {
             $con = new ClaseConectar();
             $con = $con->ProcedimientoParaConectar();
-            $cadena = "INSERT INTO `unidad_medida` ( `Detalle`, `Tipo`) VALUES ('$Detalle', '$Tipo')";
+            $cadena = "INSERT INTO `unidad_medida` ( `Detalle`, `Tipo`) VALUES ('$Detalle','$Tipo')";
             if (mysqli_query($con, $cadena)) {
                 return $con->insert_id;
             } else {
@@ -42,7 +42,7 @@ class Unidad_Medida
             $con->close();
         }
     }
-    public function actualizar($idUnidad_Medida, $Detalle, $Tipo) //update unidad_medida set Detalle = $Detalle, Tipo = $Tipo where id = $id
+    public function actualizar($idUnidad_Medida, $Detalle, $Tipo) //update unidad_medida set detalle = $detalle, tipo = $tipo where id = $id
     {
         try {
             $con = new ClaseConectar();
@@ -65,7 +65,7 @@ class Unidad_Medida
             $con = new ClaseConectar();
             $con = $con->ProcedimientoParaConectar();
             $cadena = "DELETE FROM `unidad_medida` WHERE `idUnidad_Medida`= $idUnidad_Medida";
-            // echo $cadena;
+            //echo $cadena;
             if (mysqli_query($con, $cadena)) {
                 return 1;
             } else {

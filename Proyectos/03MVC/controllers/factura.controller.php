@@ -34,9 +34,29 @@ switch ($_GET["op"]) {
         $idFactura = intval($_POST["idFactura"]);
         $datos = array();
         $datos = $factura->uno($idFactura);
-        $res = mysqli_fetch_assoc($datos);
+        //$res = mysqli_fetch_assoc($datos);
+        while ($row = mysqli_fetch_assoc($datos)) {
+            $res[] = $row;
+        }
+        //print_r($res);
         echo json_encode($res);
         break;
+
+        case 'unoFacDet': // Procedimiento para obtener una factura por ID
+            if (!isset($_POST["idFactura"])) {
+                echo json_encode(["error" => "Factura ID not specified."]);
+                exit();
+            }
+            $idFactura = intval($_POST["idFactura"]);
+            $datos = array();
+            $datos = $factura->unoFacDet($idFactura);
+            //$res = mysqli_fetch_assoc($datos);
+            while ($row = mysqli_fetch_assoc($datos)) {
+                $res[] = $row;
+            }
+            //print_r($res);
+            echo json_encode($res);
+            break;
 
     case 'insertar': // Procedimiento para insertar una nueva factura
         if (!isset($_POST["Fecha"]) || !isset($_POST["Sub_total"]) || !isset($_POST["Sub_total_iva"]) || !isset($_POST["Valor_IVA"]) || !isset($_POST["Clientes_idClientes"])) {

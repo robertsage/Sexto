@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SharedModule } from '../theme/shared/shared.module';
 import { RouterLink } from '@angular/router';
 import { IProducto } from '../Interfaces/iproducto';
-import Swal from 'sweetalert2';
 import { ProductoService } from '../Services/productos.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-productos',

@@ -28,6 +28,7 @@ import {
   ArrowRightOutline,
   GithubOutline
 } from '@ant-design/icons-angular/icons';
+import { UsuariosService } from 'src/app/Services/usuarios.service';
 
 @Component({
   selector: 'app-nav-right',
@@ -42,7 +43,10 @@ export class NavRightComponent {
   windowWidth: number;
   screenFull: boolean = true;
 
-  constructor(private iconService: IconService) {
+  constructor(
+    private iconService: IconService,
+    private usuariosServicio: UsuariosService
+  ) {
     this.windowWidth = window.innerWidth;
     this.iconService.addIcon(
       ...[
@@ -74,38 +78,42 @@ export class NavRightComponent {
     },
     {
       icon: 'user',
-      title: 'Ver Perfil'
+      title: 'View Profile'
     },
     {
       icon: 'profile',
-      title: 'Perfil Social'
+      title: 'Social Profile'
     },
     {
       icon: 'wallet',
-      title: 'Facturación'
+      title: 'Billing'
     }
   ];
 
   setting = [
     {
       icon: 'question-circle',
-      title: 'Soporte'
+      title: 'Support'
     },
     {
       icon: 'user',
-      title: 'Configurar Cuenta'
+      title: 'Account Settings'
     },
     {
       icon: 'lock',
-      title: 'Centro de Privacidad'
+      title: 'Privacy Center'
     },
     {
       icon: 'comment',
-      title: 'Comentarios'
+      title: 'Feedback'
     },
     {
       icon: 'unordered-list',
-      title: 'Historial'
+      title: 'History'
     }
   ];
+
+  salir() {
+    this.usuariosServicio.logout();
+  }
 }

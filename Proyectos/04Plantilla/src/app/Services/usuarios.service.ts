@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { IUsuarios } from '../Interfaces/iusuarios';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class UsuariosService {
   private loggedIn = new BehaviorSubject<boolean>(false);

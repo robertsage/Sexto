@@ -28,7 +28,7 @@
                   <td>{{ producto.Valor_Compra | currency }}</td>
                   <td>{{ producto.Valor_Venta | currency }}</td>
                   <td>
-                    <button type="button" class="btn btn-outline-success" [routerLink]="['/editarproducto/', producto.idProductos, producto.idKardex]">
+                    <button type="button" class="btn btn-outline-success" [routerLink]="['/editarproducto', producto.idProductos]">
                       Editar
                     </button>
                     <button (click)="eliminar(producto.idProductos)" type="button" class="btn btn-outline-danger">Eliminar</button>

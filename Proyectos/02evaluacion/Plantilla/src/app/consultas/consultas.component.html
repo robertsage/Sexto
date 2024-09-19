@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-sm-12">
+      <app-card cardTitle="Lista de Consultas" blockClass="pc-component">
+        <div class="col-md-12 col-xl-8">
+          <h5 class="mb-3 d-flex justify-content-between">
+            <a href="nuevaconsulta" class="btn btn-outline-dark">Nueva Consulta</a>
+              
+            <!-- Cambia este botón para llamar al método de impresión -->
+            <button (click)="imprimirConsultas()" class="btn btn-outline-dark ms-auto">Imprimir Consultas</button>
+          </h5>
+          <div class="card tbl-card">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Fecha</th>
+                    <th>Decripcion</th>
+                    <th>Medico</th>
+                    <th>Paciente</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (consulta of listaConsultas; track $index) {
+                    <tr>
+                      <td>{{ $index + 1 }}</td>
+                      <td>{{ consulta.Fecha }}</td>
+                      <td>{{ consulta.Descripcion }}</td>
+                      <td>{{ consulta.Medico }}</td>
+                      <td>{{ consulta.NombrePaciente }}</td>
+                      <td>{{ consulta.ApellidoPaciente }}</td>
+                      <td>
+                        <button type="button" class="btn btn-outline-success" [routerLink]="['/editarconsulta/', consulta.idConsultas]">
+                          Editar
+                        </button>
+                        <button (click)="eliminar(consulta.idConsultas)" type="button" class="btn btn-outline-danger">Eliminar</button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </div>

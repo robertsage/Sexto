@@ -21,9 +21,9 @@ switch ($_GET["op"]) {
         $datos = array();
         $datos = $factura->todos();
         while ($row = mysqli_fetch_assoc($datos)) {
-            $todas[] = $row;
+            $todos[] = $row;
         }
-        echo json_encode($todas);
+        echo json_encode($todos);
         break;
 
     case 'uno': // Procedimiento para obtener una factura por ID

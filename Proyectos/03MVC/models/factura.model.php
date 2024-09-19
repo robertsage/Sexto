@@ -21,7 +21,7 @@ class Factura
                     df.idDetalle_Factura as idDetalle_Factura_d,
                     f.idFactura AS idFactura,
                     f.Fecha AS Fecha,
-                    c.Cedula Cedula,
+                    c.Cedula as Cedula,
                     c.Nombres AS Nombres,
                     c.Direccion AS Direccion,
                     c.Telefono as Telefono,
